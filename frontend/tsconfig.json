@@ -1,5 +1,14 @@
+
 {
   "compilerOptions": {
-    "jsx": "react-jsx"
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "bundler", // 👈 Fixes the .css import error
+    "allowImportingTsExtensions": true, // 👈 Fixes the .tsx extension error
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "strict": true,
+    "isolatedModules": true,
+    "skipLibCheck": true
   }
 }
