@@ -26,7 +26,17 @@ router.post("/signup", async(req: Request, res: Response) => {
       password: hashedPassword 
     });
 
-    res.status(200).json({ message: "User signed up" });
+    const token = jwt.sign(
+      {
+        userId: user._id,
+      },
+      process.env.JWT_SECRET!,
+      {expiresIn : '1h'}
+    );
+
+    res.status(200).json({ message: "User signed up",
+      token : token
+     });
 
   } catch(e) {
     res.status(411).json({ message: "User already exists" });
@@ -34,7 +44,7 @@ router.post("/signup", async(req: Request, res: Response) => {
 });
 
 
-router.post("/login", authMiddleware, async(req: Request, res: Response) => {
+router.post("/login", async(req: Request, res: Response) => {
   const parsed = loginSchema.safeParse(req.body);
   
   if (!parsed.success) {
@@ -135,10 +145,9 @@ router.post("/tasks",authMiddleware ,async (req : AuthRequest , res : Response) 
       title,
       description,
       projectId,
-      assignedTo,
-      dueDate,
-      createdBy: req.user.id,
-    })
+      status: "TODO",
+      createdBy: req.user.id, 
+    });
 
     return res.status(201).json({
       message : "Task created",
